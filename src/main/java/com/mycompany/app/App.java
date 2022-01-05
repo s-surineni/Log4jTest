@@ -1,18 +1,31 @@
 package com.mycompany.app;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.DefaultConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
+import org.apache.logging.log4j.spi.LoggerContext;
+
+import java.lang.reflect.Field;
+
 /**
  * Hello world!
  *
  */
 public class App 
 {
-    final static Logger logger = Logger.getLogger(App.class);
-    public static void main( String[] args )
-    {
+    final static Logger logger = LogManager.getLogger(App.class);
+    public static void main( String[] args ) throws NoSuchFieldException, IllegalAccessException {
 
         App obj = new App();
         obj.runMe("Ironman");
         System.out.println( "Hello World!" );
+
+        LoggerContext lContect = LogManager.getContext();
+        Field f = lContect.getClass().getDeclaredField("configuration");
+        f.setAccessible(true);
+//        XmlConfiguration iWantThis = (XmlConfiguration) f.get(lContect);
+//        System.out.println("Config File: " + iWantThis.getName());
+        System.out.println("Config File: " + f.get(lContect));
     }
 
     private void runMe(String parameter){
